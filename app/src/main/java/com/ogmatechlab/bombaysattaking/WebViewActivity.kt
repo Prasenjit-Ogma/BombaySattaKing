@@ -1,6 +1,7 @@
 package com.ogmatechlab.bombaysattaking
 
 import android.annotation.SuppressLint
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.WindowManager
 import android.webkit.WebChromeClient
@@ -15,6 +16,7 @@ class WebViewActivity : AppCompatActivity() {
     }
 
     private lateinit var webViewBinding: ActivityWebViewBinding
+    private lateinit var player: MediaPlayer
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +30,7 @@ class WebViewActivity : AppCompatActivity() {
         webViewBinding.webView.settings.allowContentAccess = true
         webViewBinding.webView.settings.allowFileAccess = true
         webViewBinding.webView.settings.domStorageEnabled = true
+        webViewBinding.webView.settings.mediaPlaybackRequiresUserGesture = true
         webViewBinding.webView.loadUrl(EXTRA_URL)
 
         window.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
@@ -37,6 +40,22 @@ class WebViewActivity : AppCompatActivity() {
                 super.onPageFinished(view, url)
             }
         }
+        playMusic()
 
     }
+
+    override fun onPause() {
+        super.onPause()
+        player.stop()
+    }
+
+    private fun playMusic() {
+        player = MediaPlayer.create(this, R.raw.machine_sound)
+        player.also {
+            it.start()
+            it.isLooping = false
+            it.setVolume(50F, 50F)
+        }
+    }
+
 }
