@@ -84,7 +84,7 @@ class WebViewActivity : AppCompatActivity() {
     }
 
     private fun playMusic() {
-        val timer = object : CountDownTimer(20000, 1000) {
+        val timer = object : CountDownTimer(18000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 player.also {
                     it.start()
