@@ -3,12 +3,15 @@ package com.ogmatechlab.bombaysattaking
 import android.annotation.SuppressLint
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.util.Log
 import android.view.WindowManager
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import com.ogmatechlab.bombaysattaking.databinding.ActivityWebViewBinding
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 class WebViewActivity : AppCompatActivity() {
     companion object {
@@ -40,7 +43,15 @@ class WebViewActivity : AppCompatActivity() {
                 super.onPageFinished(view, url)
             }
         }
-        playMusic()
+        val formatter = DateTimeFormatter.ofPattern("HH:mm")
+        val current = LocalTime.now().format(formatter)
+        Log.e("PRINT", current.toString())
+
+        for (i in 10 until 20) {
+            if (current.toString() == "$i:00" || current.toString() == "$i:30") {
+                playMusic()
+            }
+        }
 
     }
 
