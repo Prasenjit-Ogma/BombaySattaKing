@@ -5,6 +5,7 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
+import android.view.View
 import android.view.WindowManager
 import android.webkit.WebChromeClient
 import android.webkit.WebView
@@ -30,6 +31,8 @@ class WebViewActivity : AppCompatActivity() {
         webViewBinding = ActivityWebViewBinding.inflate(layoutInflater)
         setContentView(webViewBinding.root)
 
+        webViewBinding.progressBar.visibility = View.VISIBLE
+
         webViewBinding.webView.webChromeClient = WebChromeClient()
         webViewBinding.webView.webViewClient = WebViewClient()
         webViewBinding.webView.settings.javaScriptEnabled = true
@@ -44,6 +47,7 @@ class WebViewActivity : AppCompatActivity() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                 super.onPageFinished(view, url)
+                webViewBinding.progressBar.visibility = View.GONE
             }
         }
 
@@ -70,7 +74,7 @@ class WebViewActivity : AppCompatActivity() {
 
     fun checkCurrentTime() {
         for (i in 10..20) {
-            if (current == "$i:00:01" || current == "$i:30:01" && current != "20:30:01") {
+            if (current == "$i:00:02" || current == "$i:30:02" && current != "20:30:01") {
                 playMusic()
             }
         }
@@ -87,7 +91,7 @@ class WebViewActivity : AppCompatActivity() {
     }
 
     private fun playMusic() {
-        val timer = object : CountDownTimer(19000, 1000) {
+        val timer = object : CountDownTimer(18000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 player.also {
                     it.start()
