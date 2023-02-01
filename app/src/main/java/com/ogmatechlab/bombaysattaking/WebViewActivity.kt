@@ -46,6 +46,7 @@ class WebViewActivity : AppCompatActivity() {
                 super.onPageFinished(view, url)
             }
         }
+        player = MediaPlayer.create(this, R.raw.machine_sound)
         val timer = object : CountDownTimer(600000000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
@@ -74,7 +75,6 @@ class WebViewActivity : AppCompatActivity() {
     }
 
     private fun playMusic() {
-        player = MediaPlayer.create(this, R.raw.machine_sound)
         player.also {
             it.start()
             it.isLooping = false
