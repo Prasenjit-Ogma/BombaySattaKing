@@ -30,6 +30,8 @@ class WebViewActivity : AppCompatActivity() {
         webViewBinding = ActivityWebViewBinding.inflate(layoutInflater)
         setContentView(webViewBinding.root)
 
+        player = MediaPlayer.create(this, R.raw.machine_sound)
+
         webViewBinding.webView.webChromeClient = WebChromeClient()
         webViewBinding.webView.webViewClient = WebViewClient()
         webViewBinding.webView.settings.javaScriptEnabled = true
@@ -46,24 +48,30 @@ class WebViewActivity : AppCompatActivity() {
                 super.onPageFinished(view, url)
             }
         }
-        player = MediaPlayer.create(this, R.raw.machine_sound)
-        val timer = object : CountDownTimer(600000000, 1000) {
+
+        fetchTimeFromDevice()
+
+    }
+
+    private fun fetchTimeFromDevice() {
+        val timer = object : CountDownTimer(60000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
                 current = LocalTime.now().format(formatter)
                 Log.e("PRINT", current)
-                check()
+                checkCurrentTime()
             }
 
-            override fun onFinish() {}
+            override fun onFinish() {
+                fetchTimeFromDevice()
+            }
         }
         timer.start()
-
     }
 
-    fun check() {
-        for (i in 10 until 20) {
-            if (current == "$i:00:00" || current == "$i:30:00") {
+    fun checkCurrentTime() {
+        for (i in 10..20) {
+            if (current == "$i:00:01" || current == "$i:30:01") {
                 playMusic()
             }
         }
@@ -75,11 +83,19 @@ class WebViewActivity : AppCompatActivity() {
     }
 
     private fun playMusic() {
-        player.also {
-            it.start()
-            it.isLooping = false
-            it.setVolume(50F, 50F)
+        val timer = object : CountDownTimer(20000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                player.also {
+                    it.start()
+                    it.isLooping = false
+                }
+            }
+
+            override fun onFinish() {
+                player.stop()
+            }
         }
+        timer.start()
     }
 
 }
