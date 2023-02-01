@@ -49,6 +49,7 @@ class WebViewActivity : AppCompatActivity() {
             }
         }
 
+
         fetchTimeFromDevice()
 
     }
@@ -71,7 +72,7 @@ class WebViewActivity : AppCompatActivity() {
 
     fun checkCurrentTime() {
         for (i in 10..20) {
-            if (current == "$i:00:01" || current == "$i:30:01") {
+            if (current == "$i:00:01" || current == "$i:30:01" && current != "20:30:01") {
                 playMusic()
             }
         }
