@@ -46,7 +46,7 @@ class WebViewActivity : AppCompatActivity() {
                 super.onPageFinished(view, url)
             }
         }
-        val timer = object : CountDownTimer(1000, 1000) {
+        val timer = object : CountDownTimer(600000000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
                 current = LocalTime.now().format(formatter)
