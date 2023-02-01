@@ -30,8 +30,6 @@ class WebViewActivity : AppCompatActivity() {
         webViewBinding = ActivityWebViewBinding.inflate(layoutInflater)
         setContentView(webViewBinding.root)
 
-        player = MediaPlayer.create(this, R.raw.machine_sound)
-
         webViewBinding.webView.webChromeClient = WebChromeClient()
         webViewBinding.webView.webViewClient = WebViewClient()
         webViewBinding.webView.settings.javaScriptEnabled = true
@@ -76,6 +74,11 @@ class WebViewActivity : AppCompatActivity() {
                 playMusic()
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        player = MediaPlayer.create(this, R.raw.machine_sound)
     }
 
     override fun onPause() {
