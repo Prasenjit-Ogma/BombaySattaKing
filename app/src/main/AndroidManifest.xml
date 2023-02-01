@@ -13,15 +13,16 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.BombaySattaKing"
         tools:targetApi="31">
         <activity
             android:name=".WebViewActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/Theme.BombaySattaKing" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:screenOrientation="fullSensor"
+            android:screenOrientation="sensorPortrait"
             android:theme="@style/Theme.BombaySattaKing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
