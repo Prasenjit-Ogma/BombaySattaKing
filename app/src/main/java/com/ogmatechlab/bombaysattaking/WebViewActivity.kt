@@ -3,6 +3,7 @@ package com.ogmatechlab.bombaysattaking
 import android.annotation.SuppressLint
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.WindowManager
 import android.webkit.WebChromeClient
@@ -20,6 +21,8 @@ class WebViewActivity : AppCompatActivity() {
 
     private lateinit var webViewBinding: ActivityWebViewBinding
     private lateinit var player: MediaPlayer
+    private lateinit var formatter: DateTimeFormatter
+    private lateinit var current: String
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,16 +46,26 @@ class WebViewActivity : AppCompatActivity() {
                 super.onPageFinished(view, url)
             }
         }
-        val formatter = DateTimeFormatter.ofPattern("HH:mm")
-        val current = LocalTime.now().format(formatter)
-        Log.e("PRINT", current.toString())
+        val timer = object : CountDownTimer(1000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+                current = LocalTime.now().format(formatter)
+                Log.e("PRINT", current)
+                check()
+            }
 
+            override fun onFinish() {}
+        }
+        timer.start()
+
+    }
+
+    fun check() {
         for (i in 10 until 20) {
-            if (current.toString() == "$i:00" || current.toString() == "$i:30") {
+            if (current == "$i:00:00" || current == "$i:30:00") {
                 playMusic()
             }
         }
-
     }
 
     override fun onPause() {
