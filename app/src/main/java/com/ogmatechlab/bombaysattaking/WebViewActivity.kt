@@ -7,9 +7,7 @@ import android.os.CountDownTimer
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
-import android.webkit.WebChromeClient
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.webkit.*
 import androidx.appcompat.app.AppCompatActivity
 import com.ogmatechlab.bombaysattaking.databinding.ActivityWebViewBinding
 import java.time.LocalTime
@@ -31,23 +29,34 @@ class WebViewActivity : AppCompatActivity() {
         webViewBinding = ActivityWebViewBinding.inflate(layoutInflater)
         setContentView(webViewBinding.root)
 
-        webViewBinding.progressBar.visibility = View.VISIBLE
+        with(webViewBinding) {
+            cardViewIndicator.visibility = View.VISIBLE
 
-        webViewBinding.webView.webChromeClient = WebChromeClient()
-        webViewBinding.webView.webViewClient = WebViewClient()
-        webViewBinding.webView.settings.javaScriptEnabled = true
-        webViewBinding.webView.settings.allowContentAccess = true
-        webViewBinding.webView.settings.allowFileAccess = true
-        webViewBinding.webView.settings.domStorageEnabled = true
-        webViewBinding.webView.settings.mediaPlaybackRequiresUserGesture = true
-        webViewBinding.webView.loadUrl(EXTRA_URL)
+            // Clear all the Application Cache, Web SQL Database and the HTML5 Web Storage
+            WebStorage.getInstance().deleteAllData()
 
-        window.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-        webViewBinding.webView.webViewClient = object : WebViewClient() {
-            override fun onPageFinished(view: WebView?, url: String?) {
-                window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-                super.onPageFinished(view, url)
-                webViewBinding.progressBar.visibility = View.GONE
+            // Clear all the cookies
+            CookieManager.getInstance().removeAllCookies(null)
+            CookieManager.getInstance().flush()
+
+            webView.webChromeClient = WebChromeClient()
+            webView.webViewClient = WebViewClient()
+            webView.settings.javaScriptEnabled = true
+            webView.settings.allowContentAccess = true
+            webView.settings.allowFileAccess = true
+            webView.settings.domStorageEnabled = false
+            webView.settings.mediaPlaybackRequiresUserGesture = true
+            webView.settings.cacheMode = WebSettings.LOAD_NO_CACHE
+            webView.loadUrl(EXTRA_URL)
+
+
+            window.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+            webView.webViewClient = object : WebViewClient() {
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                    super.onPageFinished(view, url)
+                    cardViewIndicator.visibility = View.GONE
+                }
             }
         }
 
@@ -91,7 +100,7 @@ class WebViewActivity : AppCompatActivity() {
     }
 
     private fun playMusic() {
-        val timer = object : CountDownTimer(18000, 1000) {
+        val timer = object : CountDownTimer(16000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 player.also {
                     it.start()
