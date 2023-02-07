@@ -15,6 +15,11 @@
         android:supportsRtl="true"
         tools:targetApi="31">
         <activity
+            android:name=".PlayGame"
+            android:exported="false"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/Theme.BombaySattaKing" />
+        <activity
             android:name=".WebViewActivity"
             android:exported="false"
             android:screenOrientation="sensorPortrait"

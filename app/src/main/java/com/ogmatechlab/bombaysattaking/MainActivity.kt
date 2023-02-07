@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(mainBinding.root)
 
         Handler(Looper.getMainLooper()).postDelayed({
-            Intent(applicationContext, WebViewActivity::class.java).apply {
+            Intent(applicationContext, PlayGame::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
             }.also {
                 startActivity(it)
