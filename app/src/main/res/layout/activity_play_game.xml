@@ -24,9 +24,38 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imgRedDot"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="5dp"
+                android:background="#b20000"
+                app:contentPadding="12dp"
+                app:layout_constraintBottom_toBottomOf="@+id/imgLogo"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/imgLogo"
+                app:shapeAppearance="@style/ShapeAppearance.App.RoundedImg" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/txtTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/gilroy_semi_bold"
+                android:text="BOMBAY SATTA KING"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/imgLogo"
+                app:layout_constraintStart_toEndOf="@id/imgRedDot"
+                app:layout_constraintTop_toTopOf="@id/imgLogo" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imgLogo"
                 android:layout_width="60dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="5dp"
                 android:layout_marginEnd="5dp"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -167,6 +196,18 @@
                 app:shapeAppearance="@style/ShapeAppearance.App.RoundedImg" />
 
             <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#b20000"
+                android:paddingVertical="10dp"
+                app:contentPadding="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias=".75"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/imgMachine"
+                app:shapeAppearance="@style/ShapeAppearance.App.RoundedImg" />
+
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/imgAnimation7"
                 android:layout_width="35dp"
                 android:layout_height="50dp"
@@ -197,12 +238,15 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TRY"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:backgroundTint="#ffa500"
+        android:fontFamily="@font/gilroy_semi_bold"
+        android:minHeight="64dp"
+        android:text="VIEW RESULT"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

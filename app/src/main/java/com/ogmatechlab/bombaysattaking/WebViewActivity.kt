@@ -15,7 +15,7 @@ import java.time.format.DateTimeFormatter
 
 class WebViewActivity : AppCompatActivity() {
     companion object {
-        private const val EXTRA_URL = "https://www.ogmatechlab.com/mumbaiking/"
+        private const val EXTRA_URL = "https://www.ogmatechlab.com/mumbaiking/view_result.php"
     }
 
     private lateinit var webViewBinding: ActivityWebViewBinding
@@ -30,7 +30,12 @@ class WebViewActivity : AppCompatActivity() {
         setContentView(webViewBinding.root)
 
         with(webViewBinding) {
-            cardViewIndicator.visibility = View.VISIBLE
+
+            toolbar.setNavigationOnClickListener {
+                onBackPressedDispatcher.onBackPressed()
+            }
+
+            progressBar.visibility = View.VISIBLE
 
             // Clear all the Application Cache, Web SQL Database and the HTML5 Web Storage
             WebStorage.getInstance().deleteAllData()
@@ -55,7 +60,7 @@ class WebViewActivity : AppCompatActivity() {
                 override fun onPageFinished(view: WebView?, url: String?) {
                     window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                     super.onPageFinished(view, url)
-                    cardViewIndicator.visibility = View.GONE
+                    progressBar.visibility = View.GONE
                 }
             }
         }
