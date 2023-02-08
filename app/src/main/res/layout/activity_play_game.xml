@@ -12,126 +12,187 @@
         android:scaleType="centerCrop"
         app:srcCompat="@drawable/burj_khalifa" />
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="55dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/flag_india" />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imgAnimation1"
-        android:layout_width="35dp"
-        android:layout_height="50dp"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias=".21"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:paddingVertical="5dp"
-        app:layout_constraintVertical_bias=".34" />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imgAnimation2"
-        android:layout_width="35dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="5dp"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imgAnimation1"
-        app:layout_constraintTop_toTopOf="parent"
-        android:paddingVertical="5dp"
-        app:layout_constraintVertical_bias=".34" />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imgAnimation3"
-        android:layout_width="35dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="6dp"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imgAnimation2"
-        app:layout_constraintTop_toTopOf="parent"
-        android:paddingVertical="5dp"
-        app:layout_constraintVertical_bias=".34" />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imgAnimation4"
-        android:layout_width="35dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="8dp"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imgAnimation3"
-        app:layout_constraintTop_toTopOf="parent"
-        android:paddingVertical="5dp"
-        app:layout_constraintVertical_bias=".34" />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imgAnimation5"
-        android:layout_width="35dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="6dp"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imgAnimation4"
-        app:layout_constraintTop_toTopOf="parent"
-        android:paddingVertical="5dp"
-        app:layout_constraintVertical_bias=".34" />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imgAnimation6"
-        android:layout_width="35dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="6dp"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imgAnimation5"
-        app:layout_constraintTop_toTopOf="parent"
-        android:paddingVertical="5dp"
-        app:layout_constraintVertical_bias=".34" />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imgMachine"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="150dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="80dp"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/slot" />
+        app:layout_constraintBottom_toTopOf="@+id/btn">
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imgAnimation7"
-        android:layout_width="35dp"
-        android:layout_height="50dp"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias=".33"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias=".52" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imgAnimation8"
-        android:layout_width="35dp"
-        android:layout_height="50dp"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias=".63"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias=".52" />
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="60dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/logo" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imgFlag"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="50dp"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/flag_india" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/txtTimeStamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="50dp"
+                android:fontFamily="@font/gilroy_semi_bold"
+                android:text="Time"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@+id/imgFlag"
+                app:layout_constraintStart_toEndOf="@+id/imgFlag"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="30dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginEnd="5dp"
+                app:layout_constraintBottom_toBottomOf="@+id/imgFlag"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/refresh" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imgAnimation1"
+                android:layout_width="35dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="5dp"
+                android:paddingVertical="5dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias=".21"
+                app:layout_constraintStart_toStartOf="@id/imgMachine"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias=".34" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imgAnimation2"
+                android:layout_width="35dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="5dp"
+                android:paddingVertical="5dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imgAnimation1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias=".34" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imgAnimation3"
+                android:layout_width="35dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="5dp"
+                android:paddingVertical="5dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imgAnimation2"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias=".34" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imgAnimation4"
+                android:layout_width="35dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="5dp"
+                android:paddingVertical="5dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imgAnimation3"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias=".34" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imgAnimation5"
+                android:layout_width="35dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="5dp"
+                android:paddingVertical="5dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imgAnimation4"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias=".34" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imgAnimation6"
+                android:layout_width="35dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="5dp"
+                android:paddingVertical="5dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imgAnimation5"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias=".34" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imgMachine"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="2:3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imgFlag"
+                app:srcCompat="@drawable/slot" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#2e562a"
+                android:paddingVertical="10dp"
+                app:contentPadding="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias=".25"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/imgMachine"
+                app:shapeAppearance="@style/ShapeAppearance.App.RoundedImg" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imgAnimation7"
+                android:layout_width="35dp"
+                android:layout_height="50dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias=".34"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias=".55" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imgAnimation8"
+                android:layout_width="35dp"
+                android:layout_height="50dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias=".625"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias=".55" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 
     <com.google.android.material.button.MaterialButton
