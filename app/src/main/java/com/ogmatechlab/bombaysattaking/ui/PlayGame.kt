@@ -14,6 +14,7 @@ import com.ogmatechlab.bombaysattaking.R
 import com.ogmatechlab.bombaysattaking.api.APIClient
 import com.ogmatechlab.bombaysattaking.databinding.ActivityPlayGameBinding
 import com.ogmatechlab.bombaysattaking.utils.NetworkInfo
+import com.ogmatechlab.bombaysattaking.utils.SharedStorage
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -29,8 +30,6 @@ class PlayGame : AppCompatActivity() {
     private lateinit var current2: String
     private lateinit var player: MediaPlayer
 
-    private lateinit var prizeNumber: String
-    private lateinit var luckyNumber: String
     val images_of_number = IntArray(10)
     val lucky_images_of_number = IntArray(10)
     val imageviews_prize_number: Array<ShapeableImageView?> = arrayOfNulls(6)
@@ -73,9 +72,8 @@ class PlayGame : AppCompatActivity() {
         imageviews_lucky_number[0] = playGameBinding.imgAnimation7
         imageviews_lucky_number[1] = playGameBinding.imgAnimation8
 
-        prizeNumber = "343299"
-
-        luckyNumber = "01"
+        SharedStorage.storeLuckyNum(this@PlayGame, "343299")
+        SharedStorage.storeLuckyPrizeNum(this@PlayGame, "01")
 
         pauseRolling()
 
@@ -126,7 +124,7 @@ class PlayGame : AppCompatActivity() {
     }
 
     private fun startRolling() {
-        val timer = object : CountDownTimer(17000, 1000) {
+        val timer = object : CountDownTimer(20000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 Glide.with(this@PlayGame).asGif().load(R.raw.gif_down)
                     .into(playGameBinding.imgAnimation1)
@@ -148,8 +146,8 @@ class PlayGame : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                prizeNumber = "888888"
-                luckyNumber = "22"
+                SharedStorage.storeLuckyNum(this@PlayGame, "888888")
+                SharedStorage.storeLuckyPrizeNum(this@PlayGame, "22")
                 pauseRolling()
             }
         }
@@ -157,25 +155,30 @@ class PlayGame : AppCompatActivity() {
     }
 
     private fun pauseRolling() {
-        for (j in prizeNumber.indices) {
-            for (i in images_of_number.indices) {
-                if (prizeNumber[j].digitToInt() == i) {
-                    imageviews_prize_number[j]?.let {
-                        Glide.with(this).asBitmap().load(images_of_number[i]).into(it)
+        SharedStorage.getStoredLuckyNum(this@PlayGame)?.let {
+            for (j in it.indices) {
+                for (i in images_of_number.indices) {
+                    if (it[j].digitToInt() == i) {
+                        imageviews_prize_number[j]?.let {
+                            Glide.with(this).asBitmap().load(images_of_number[i]).into(it)
+                        }
                     }
                 }
             }
         }
 
-        for (j in luckyNumber.indices) {
-            for (i in lucky_images_of_number.indices) {
-                if (luckyNumber[j].digitToInt() == i) {
-                    imageviews_lucky_number[j]?.let {
-                        Glide.with(this).asBitmap().load(lucky_images_of_number[i]).into(it)
+        SharedStorage.getStoredLuckyPrizeNum(this@PlayGame)?.let {
+            for (j in it.indices) {
+                for (i in lucky_images_of_number.indices) {
+                    if (it[j].digitToInt() == i) {
+                        imageviews_lucky_number[j]?.let {
+                            Glide.with(this).asBitmap().load(lucky_images_of_number[i]).into(it)
+                        }
                     }
                 }
             }
         }
+
     }
 
     override fun onResume() {
@@ -189,7 +192,7 @@ class PlayGame : AppCompatActivity() {
     }
 
     private fun playMusic() {
-        val timer = object : CountDownTimer(17000, 1000) {
+        val timer = object : CountDownTimer(20000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 player.also {
                     it.start()
