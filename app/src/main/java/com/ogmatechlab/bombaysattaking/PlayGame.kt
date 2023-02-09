@@ -4,9 +4,12 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.google.android.material.imageview.ShapeableImageView
 import com.ogmatechlab.bombaysattaking.databinding.ActivityPlayGameBinding
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -21,16 +24,66 @@ class PlayGame : AppCompatActivity() {
     private lateinit var rand6Digit: String
     private val arraylist = arrayListOf<String>()
 
+
+    private val prize_number = "446881"
+    private val lucky_number = "97"
+    val images_of_number = IntArray(10)
+    val imageviews_prize_number: Array<ShapeableImageView?> = arrayOfNulls(6)
+    val imageviews_lucky_number: Array<ShapeableImageView?> = arrayOfNulls(2)
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         playGameBinding = ActivityPlayGameBinding.inflate(layoutInflater)
         setContentView(playGameBinding.root)
 
-        val str = "834215"
+        val str = "834211"
 
         Log.e("PRINT", "${str.toWords()}")
 
-        for (i in str.toWords()) {
+
+        images_of_number[0] = R.drawable.num_zero
+        images_of_number[1] = R.drawable.num_one
+        images_of_number[2] = R.drawable.num_two
+        images_of_number[3] = R.drawable.num_three
+        images_of_number[4] = R.drawable.num_four
+        images_of_number[5] = R.drawable.num_five
+        images_of_number[6] = R.drawable.num_six
+        images_of_number[7] = R.drawable.num_seven
+        images_of_number[8] = R.drawable.num_eight
+        images_of_number[9] = R.drawable.num_nine
+
+        imageviews_prize_number[0] = playGameBinding.imgAnimation1
+        imageviews_prize_number[1] = playGameBinding.imgAnimation2
+        imageviews_prize_number[2] = playGameBinding.imgAnimation3
+        imageviews_prize_number[3] = playGameBinding.imgAnimation4
+        imageviews_prize_number[4] = playGameBinding.imgAnimation5
+        imageviews_prize_number[5] = playGameBinding.imgAnimation6
+        imageviews_lucky_number[0] = playGameBinding.imgAnimation7
+        imageviews_lucky_number[1] = playGameBinding.imgAnimation8
+
+
+        for(j in prize_number.indices) {
+            for (i in images_of_number.indices) {
+                if (prize_number[j].digitToInt() == i) {
+                    imageviews_prize_number[j]?.let {
+                        Glide.with(this).asBitmap().load(images_of_number[i]).into(it)
+                    }
+                }
+            }
+        }
+
+        for(j in lucky_number.indices) {
+            for (i in images_of_number.indices) {
+                if (lucky_number[j].digitToInt() == i) {
+                    imageviews_lucky_number[j]?.let {
+                        Glide.with(this).asBitmap().load(images_of_number[i]).into(it)
+                    }
+                }
+            }
+        }
+
+        /*for (i in str.toWords()) {
             Log.e("PRINT2", i)
             when (i.toInt()) {
                 0 -> {
@@ -314,7 +367,7 @@ class PlayGame : AppCompatActivity() {
                     }
                 }
             }
-        }
+        }*/
 
         /*// split string by no space
 
@@ -338,8 +391,8 @@ class PlayGame : AppCompatActivity() {
 
 
         //pauseRolling()
-        Glide.with(this).asGif().load(R.raw.gif_color_down).into(playGameBinding.imgAnimation7)
-        Glide.with(this).asGif().load(R.raw.gif_color_up).into(playGameBinding.imgAnimation8)
+        //Glide.with(this).asGif().load(R.raw.gif_color_down).into(playGameBinding.imgAnimation7)
+        //Glide.with(this).asGif().load(R.raw.gif_color_up).into(playGameBinding.imgAnimation8)
 
         playGameBinding.btn.setOnClickListener {
             /* Glide.with(this).asBitmap().load(R.drawable.num_five)
