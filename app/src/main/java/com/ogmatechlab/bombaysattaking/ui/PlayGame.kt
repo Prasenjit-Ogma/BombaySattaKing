@@ -30,10 +30,10 @@ class PlayGame : AppCompatActivity() {
     private lateinit var current2: String
     private lateinit var player: MediaPlayer
 
-    val images_of_number = IntArray(10)
-    val lucky_images_of_number = IntArray(10)
-    val imageviews_prize_number: Array<ShapeableImageView?> = arrayOfNulls(6)
-    val imageviews_lucky_number: Array<ShapeableImageView?> = arrayOfNulls(2)
+    private val imagesOfNumber = IntArray(10)
+    private val luckyImagesOfNumber = IntArray(10)
+    private val imageviewsPrizeNumber: Array<ShapeableImageView?> = arrayOfNulls(6)
+    private val imageviewsLuckyNumber: Array<ShapeableImageView?> = arrayOfNulls(2)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,37 +41,37 @@ class PlayGame : AppCompatActivity() {
         playGameBinding = ActivityPlayGameBinding.inflate(layoutInflater)
         setContentView(playGameBinding.root)
 
-        images_of_number[0] = R.drawable.num_zero
-        images_of_number[1] = R.drawable.num_one
-        images_of_number[2] = R.drawable.num_two
-        images_of_number[3] = R.drawable.num_three
-        images_of_number[4] = R.drawable.num_four
-        images_of_number[5] = R.drawable.num_five
-        images_of_number[6] = R.drawable.num_six
-        images_of_number[7] = R.drawable.num_seven
-        images_of_number[8] = R.drawable.num_eight
-        images_of_number[9] = R.drawable.num_nine
+        imagesOfNumber[0] = R.drawable.num_zero
+        imagesOfNumber[1] = R.drawable.num_one
+        imagesOfNumber[2] = R.drawable.num_two
+        imagesOfNumber[3] = R.drawable.num_three
+        imagesOfNumber[4] = R.drawable.num_four
+        imagesOfNumber[5] = R.drawable.num_five
+        imagesOfNumber[6] = R.drawable.num_six
+        imagesOfNumber[7] = R.drawable.num_seven
+        imagesOfNumber[8] = R.drawable.num_eight
+        imagesOfNumber[9] = R.drawable.num_nine
 
-        lucky_images_of_number[0] = R.drawable.lg_num_zero
-        lucky_images_of_number[1] = R.drawable.lg_num_one
-        lucky_images_of_number[2] = R.drawable.lg_num_two
-        lucky_images_of_number[3] = R.drawable.lg_num_three
-        lucky_images_of_number[4] = R.drawable.lg_num_four
-        lucky_images_of_number[5] = R.drawable.lg_num_five
-        lucky_images_of_number[6] = R.drawable.lg_num_six
-        lucky_images_of_number[7] = R.drawable.lg_num_seven
-        lucky_images_of_number[8] = R.drawable.lg_num_eight
-        lucky_images_of_number[9] = R.drawable.lg_num_nine
+        luckyImagesOfNumber[0] = R.drawable.lg_num_zero
+        luckyImagesOfNumber[1] = R.drawable.lg_num_one
+        luckyImagesOfNumber[2] = R.drawable.lg_num_two
+        luckyImagesOfNumber[3] = R.drawable.lg_num_three
+        luckyImagesOfNumber[4] = R.drawable.lg_num_four
+        luckyImagesOfNumber[5] = R.drawable.lg_num_five
+        luckyImagesOfNumber[6] = R.drawable.lg_num_six
+        luckyImagesOfNumber[7] = R.drawable.lg_num_seven
+        luckyImagesOfNumber[8] = R.drawable.lg_num_eight
+        luckyImagesOfNumber[9] = R.drawable.lg_num_nine
 
-        imageviews_prize_number[0] = playGameBinding.imgAnimation1
-        imageviews_prize_number[1] = playGameBinding.imgAnimation2
-        imageviews_prize_number[2] = playGameBinding.imgAnimation3
-        imageviews_prize_number[3] = playGameBinding.imgAnimation4
-        imageviews_prize_number[4] = playGameBinding.imgAnimation5
-        imageviews_prize_number[5] = playGameBinding.imgAnimation6
+        imageviewsPrizeNumber[0] = playGameBinding.imgAnimation1
+        imageviewsPrizeNumber[1] = playGameBinding.imgAnimation2
+        imageviewsPrizeNumber[2] = playGameBinding.imgAnimation3
+        imageviewsPrizeNumber[3] = playGameBinding.imgAnimation4
+        imageviewsPrizeNumber[4] = playGameBinding.imgAnimation5
+        imageviewsPrizeNumber[5] = playGameBinding.imgAnimation6
 
-        imageviews_lucky_number[0] = playGameBinding.imgAnimation7
-        imageviews_lucky_number[1] = playGameBinding.imgAnimation8
+        imageviewsLuckyNumber[0] = playGameBinding.imgAnimation7
+        imageviewsLuckyNumber[1] = playGameBinding.imgAnimation8
 
         SharedStorage.storeLuckyNum(this@PlayGame, "343299")
         SharedStorage.storeLuckyPrizeNum(this@PlayGame, "01")
@@ -158,10 +158,10 @@ class PlayGame : AppCompatActivity() {
     private fun pauseRolling() {
         SharedStorage.getStoredLuckyNum(this@PlayGame)?.let {
             for (j in it.indices) {
-                for (i in images_of_number.indices) {
+                for (i in imagesOfNumber.indices) {
                     if (it[j].digitToInt() == i) {
-                        imageviews_prize_number[j]?.let {
-                            Glide.with(this).asBitmap().load(images_of_number[i]).into(it)
+                        imageviewsPrizeNumber[j]?.let { imgView ->
+                            Glide.with(this).asBitmap().load(imagesOfNumber[i]).into(imgView)
                         }
                     }
                 }
@@ -170,10 +170,11 @@ class PlayGame : AppCompatActivity() {
 
         SharedStorage.getStoredLuckyPrizeNum(this@PlayGame)?.let {
             for (j in it.indices) {
-                for (i in lucky_images_of_number.indices) {
+                for (i in luckyImagesOfNumber.indices) {
                     if (it[j].digitToInt() == i) {
-                        imageviews_lucky_number[j]?.let {
-                            Glide.with(this).asBitmap().load(lucky_images_of_number[i]).into(it)
+                        imageviewsLuckyNumber[j]?.let { luckyImgView ->
+                            Glide.with(this).asBitmap().load(luckyImagesOfNumber[i])
+                                .into(luckyImgView)
                         }
                     }
                 }
