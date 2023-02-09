@@ -1,4 +1,4 @@
-package com.ogmatechlab.bombaysattaking
+package com.ogmatechlab.bombaysattaking.ui
 
 import android.content.Intent
 import android.os.Bundle

@@ -1,4 +1,4 @@
-package com.ogmatechlab.bombaysattaking
+package com.ogmatechlab.bombaysattaking.ui
 
 import android.annotation.SuppressLint
 import android.media.MediaPlayer
@@ -9,6 +9,7 @@ import android.view.View
 import android.view.WindowManager
 import android.webkit.*
 import androidx.appcompat.app.AppCompatActivity
+import com.ogmatechlab.bombaysattaking.R
 import com.ogmatechlab.bombaysattaking.databinding.ActivityWebViewBinding
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
