@@ -1,5 +1,6 @@
 package com.ogmatechlab.bombaysattaking
 
+import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -17,12 +18,326 @@ class PlayGame : AppCompatActivity() {
     private lateinit var formatter2: DateTimeFormatter
     private lateinit var current2: String
     private lateinit var player: MediaPlayer
+    private lateinit var rand6Digit: String
+    private val arraylist = arrayListOf<String>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         playGameBinding = ActivityPlayGameBinding.inflate(layoutInflater)
         setContentView(playGameBinding.root)
 
-        pauseRolling()
+        val str = "834215"
+
+        Log.e("PRINT", "${str.toWords()}")
+
+        for (i in str.toWords()) {
+            Log.e("PRINT2", i)
+            when (i.toInt()) {
+                0 -> {
+                    when (str.toWords().indexOf(i)) {
+                        0 -> {
+                            Glide.with(this).load(R.drawable.num_zero)
+                                .into(playGameBinding.imgAnimation1)
+                        }
+                        1 -> {
+                            Glide.with(this).load(R.drawable.num_zero)
+                                .into(playGameBinding.imgAnimation2)
+                        }
+                        2 -> {
+                            Glide.with(this).load(R.drawable.num_zero)
+                                .into(playGameBinding.imgAnimation3)
+                        }
+                        3 -> {
+                            Glide.with(this).load(R.drawable.num_zero)
+                                .into(playGameBinding.imgAnimation4)
+                        }
+                        4 -> {
+                            Glide.with(this).load(R.drawable.num_zero)
+                                .into(playGameBinding.imgAnimation5)
+                        }
+                        5 -> {
+                            Glide.with(this).load(R.drawable.num_zero)
+                                .into(playGameBinding.imgAnimation6)
+                        }
+                    }
+                }
+                1 -> {
+                    when (str.toWords().indexOf(i)) {
+                        0 -> {
+                            Glide.with(this).load(R.drawable.num_one)
+                                .into(playGameBinding.imgAnimation1)
+                        }
+                        1 -> {
+                            Glide.with(this).load(R.drawable.num_one)
+                                .into(playGameBinding.imgAnimation2)
+                        }
+                        2 -> {
+                            Glide.with(this).load(R.drawable.num_one)
+                                .into(playGameBinding.imgAnimation3)
+                        }
+                        3 -> {
+                            Glide.with(this).load(R.drawable.num_one)
+                                .into(playGameBinding.imgAnimation4)
+                        }
+                        4 -> {
+                            Glide.with(this).load(R.drawable.num_one)
+                                .into(playGameBinding.imgAnimation5)
+                        }
+                        5 -> {
+                            Glide.with(this).load(R.drawable.num_one)
+                                .into(playGameBinding.imgAnimation6)
+                        }
+                    }
+                }
+                2 -> {
+                    when (str.toWords().indexOf(i)) {
+                        0 -> {
+                            Glide.with(this).load(R.drawable.num_two)
+                                .into(playGameBinding.imgAnimation1)
+                        }
+                        1 -> {
+                            Glide.with(this).load(R.drawable.num_two)
+                                .into(playGameBinding.imgAnimation2)
+                        }
+                        2 -> {
+                            Glide.with(this).load(R.drawable.num_two)
+                                .into(playGameBinding.imgAnimation3)
+                        }
+                        3 -> {
+                            Glide.with(this).load(R.drawable.num_two)
+                                .into(playGameBinding.imgAnimation4)
+                        }
+                        4 -> {
+                            Glide.with(this).load(R.drawable.num_two)
+                                .into(playGameBinding.imgAnimation5)
+                        }
+                        5 -> {
+                            Glide.with(this).load(R.drawable.num_two)
+                                .into(playGameBinding.imgAnimation6)
+                        }
+                    }
+                }
+                3 -> {
+                    when (str.toWords().indexOf(i)) {
+                        0 -> {
+                            Glide.with(this).load(R.drawable.num_three)
+                                .into(playGameBinding.imgAnimation1)
+                        }
+                        1 -> {
+                            Glide.with(this).load(R.drawable.num_three)
+                                .into(playGameBinding.imgAnimation2)
+                        }
+                        2 -> {
+                            Glide.with(this).load(R.drawable.num_three)
+                                .into(playGameBinding.imgAnimation3)
+                        }
+                        3 -> {
+                            Glide.with(this).load(R.drawable.num_three)
+                                .into(playGameBinding.imgAnimation4)
+                        }
+                        4 -> {
+                            Glide.with(this).load(R.drawable.num_three)
+                                .into(playGameBinding.imgAnimation5)
+                        }
+                        5 -> {
+                            Glide.with(this).load(R.drawable.num_three)
+                                .into(playGameBinding.imgAnimation6)
+                        }
+                    }
+                }
+                4 -> {
+                    when (str.toWords().indexOf(i)) {
+                        0 -> {
+                            Glide.with(this).load(R.drawable.num_four)
+                                .into(playGameBinding.imgAnimation1)
+                        }
+                        1 -> {
+                            Glide.with(this).load(R.drawable.num_four)
+                                .into(playGameBinding.imgAnimation2)
+                        }
+                        2 -> {
+                            Glide.with(this).load(R.drawable.num_four)
+                                .into(playGameBinding.imgAnimation3)
+                        }
+                        3 -> {
+                            Glide.with(this).load(R.drawable.num_four)
+                                .into(playGameBinding.imgAnimation4)
+                        }
+                        4 -> {
+                            Glide.with(this).load(R.drawable.num_four)
+                                .into(playGameBinding.imgAnimation5)
+                        }
+                        5 -> {
+                            Glide.with(this).load(R.drawable.num_four)
+                                .into(playGameBinding.imgAnimation6)
+                        }
+                    }
+                }
+                5 -> {
+                    when (str.toWords().indexOf(i)) {
+                        0 -> {
+                            Glide.with(this).load(R.drawable.num_five)
+                                .into(playGameBinding.imgAnimation1)
+                        }
+                        1 -> {
+                            Glide.with(this).load(R.drawable.num_five)
+                                .into(playGameBinding.imgAnimation2)
+                        }
+                        2 -> {
+                            Glide.with(this).load(R.drawable.num_five)
+                                .into(playGameBinding.imgAnimation3)
+                        }
+                        3 -> {
+                            Glide.with(this).load(R.drawable.num_five)
+                                .into(playGameBinding.imgAnimation4)
+                        }
+                        4 -> {
+                            Glide.with(this).load(R.drawable.num_five)
+                                .into(playGameBinding.imgAnimation5)
+                        }
+                        5 -> {
+                            Glide.with(this).load(R.drawable.num_five)
+                                .into(playGameBinding.imgAnimation6)
+                        }
+                    }
+                }
+                6 -> {
+                    when (str.toWords().indexOf(i)) {
+                        0 -> {
+                            Glide.with(this).load(R.drawable.num_six)
+                                .into(playGameBinding.imgAnimation1)
+                        }
+                        1 -> {
+                            Glide.with(this).load(R.drawable.num_six)
+                                .into(playGameBinding.imgAnimation2)
+                        }
+                        2 -> {
+                            Glide.with(this).load(R.drawable.num_six)
+                                .into(playGameBinding.imgAnimation3)
+                        }
+                        3 -> {
+                            Glide.with(this).load(R.drawable.num_six)
+                                .into(playGameBinding.imgAnimation4)
+                        }
+                        4 -> {
+                            Glide.with(this).load(R.drawable.num_six)
+                                .into(playGameBinding.imgAnimation5)
+                        }
+                        5 -> {
+                            Glide.with(this).load(R.drawable.num_six)
+                                .into(playGameBinding.imgAnimation6)
+                        }
+                    }
+                }
+                7 -> {
+                    when (str.toWords().indexOf(i)) {
+                        0 -> {
+                            Glide.with(this).load(R.drawable.num_seven)
+                                .into(playGameBinding.imgAnimation1)
+                        }
+                        1 -> {
+                            Glide.with(this).load(R.drawable.num_seven)
+                                .into(playGameBinding.imgAnimation2)
+                        }
+                        2 -> {
+                            Glide.with(this).load(R.drawable.num_seven)
+                                .into(playGameBinding.imgAnimation3)
+                        }
+                        3 -> {
+                            Glide.with(this).load(R.drawable.num_seven)
+                                .into(playGameBinding.imgAnimation4)
+                        }
+                        4 -> {
+                            Glide.with(this).load(R.drawable.num_seven)
+                                .into(playGameBinding.imgAnimation5)
+                        }
+                        5 -> {
+                            Glide.with(this).load(R.drawable.num_seven)
+                                .into(playGameBinding.imgAnimation6)
+                        }
+                    }
+                }
+                8 -> {
+                    when (str.toWords().indexOf(i)) {
+                        0 -> {
+                            Glide.with(this).load(R.drawable.num_eight)
+                                .into(playGameBinding.imgAnimation1)
+                        }
+                        1 -> {
+                            Glide.with(this).load(R.drawable.num_eight)
+                                .into(playGameBinding.imgAnimation2)
+                        }
+                        2 -> {
+                            Glide.with(this).load(R.drawable.num_eight)
+                                .into(playGameBinding.imgAnimation3)
+                        }
+                        3 -> {
+                            Glide.with(this).load(R.drawable.num_eight)
+                                .into(playGameBinding.imgAnimation4)
+                        }
+                        4 -> {
+                            Glide.with(this).load(R.drawable.num_eight)
+                                .into(playGameBinding.imgAnimation5)
+                        }
+                        5 -> {
+                            Glide.with(this).load(R.drawable.num_eight)
+                                .into(playGameBinding.imgAnimation6)
+                        }
+                    }
+                }
+                9 -> {
+                    when (str.toWords().indexOf(i)) {
+                        0 -> {
+                            Glide.with(this).load(R.drawable.num_nine)
+                                .into(playGameBinding.imgAnimation1)
+                        }
+                        1 -> {
+                            Glide.with(this).load(R.drawable.num_nine)
+                                .into(playGameBinding.imgAnimation2)
+                        }
+                        2 -> {
+                            Glide.with(this).load(R.drawable.num_nine)
+                                .into(playGameBinding.imgAnimation3)
+                        }
+                        3 -> {
+                            Glide.with(this).load(R.drawable.num_nine)
+                                .into(playGameBinding.imgAnimation4)
+                        }
+                        4 -> {
+                            Glide.with(this).load(R.drawable.num_nine)
+                                .into(playGameBinding.imgAnimation5)
+                        }
+                        5 -> {
+                            Glide.with(this).load(R.drawable.num_nine)
+                                .into(playGameBinding.imgAnimation6)
+                        }
+                    }
+                }
+            }
+        }
+
+        /*// split string by no space
+
+        // split string by no space
+        val strSplit = str.split("".toRegex()).dropLastWhile { it.isEmpty() }
+            .toTypedArray()
+
+        // Now convert string into ArrayList
+
+        // Now convert string into ArrayList
+        val strList= ArrayList(
+            listOf(strSplit)
+        )
+
+        // Now print the ArrayList
+
+        // Now print the ArrayList
+        for (s in strList){
+            Log.e("PRINT","$s")
+        }*/
+
+
+        //pauseRolling()
         Glide.with(this).asGif().load(R.raw.gif_color_down).into(playGameBinding.imgAnimation7)
         Glide.with(this).asGif().load(R.raw.gif_color_up).into(playGameBinding.imgAnimation8)
 
@@ -34,14 +349,16 @@ class PlayGame : AppCompatActivity() {
              Glide.with(this).asBitmap().load(R.raw.gif_up).into(playGameBinding.imgAnimation4)
              Glide.with(this).asBitmap().load(R.raw.gif_down).into(playGameBinding.imgAnimation5)
              Glide.with(this).asBitmap().load(R.raw.gif_up).into(playGameBinding.imgAnimation6)*/
-            /*Intent(applicationContext, WebViewActivity::class.java).also {
+            Intent(applicationContext, WebViewActivity::class.java).also {
                 startActivity(it)
-            }*/
+            }
         }
 
         fetchTimeFromDevice()
 
     }
+
+    private fun String.toWords() = trim().splitToSequence("").filter { it.isNotEmpty() }.toList()
 
     private fun fetchTimeFromDevice() {
         val timer = object : CountDownTimer(60000, 1000) {
@@ -63,7 +380,7 @@ class PlayGame : AppCompatActivity() {
 
     fun checkCurrentTime() {
         for (i in 10..20) {
-            if (current2 == "$i:00:00" || current2 == "$i:22:00" && current2 != "20:30:00") {
+            if (current2 == "$i:00:00" || current2 == "$i:05:00" && current2 != "20:30:00") {
                 startRolling()
             }
         }
