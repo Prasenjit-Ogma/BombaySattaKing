@@ -69,6 +69,7 @@ class PlayGame : AppCompatActivity() {
         imageviews_prize_number[3] = playGameBinding.imgAnimation4
         imageviews_prize_number[4] = playGameBinding.imgAnimation5
         imageviews_prize_number[5] = playGameBinding.imgAnimation6
+
         imageviews_lucky_number[0] = playGameBinding.imgAnimation7
         imageviews_lucky_number[1] = playGameBinding.imgAnimation8
 
