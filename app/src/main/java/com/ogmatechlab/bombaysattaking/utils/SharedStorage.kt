@@ -17,7 +17,7 @@ object SharedStorage {
 
     fun getStoredLuckyNum(context: Context): String? {
         sharedPref = context.getSharedPreferences(LUCKY_NUM, Context.MODE_PRIVATE)
-        return sharedPref.getString(LUCKY_NUM, "000000")
+        return sharedPref.getString(LUCKY_NUM, "")
     }
 
     fun storeLuckyPrizeNum(context: Context, luckyPrize: String) {
@@ -29,7 +29,7 @@ object SharedStorage {
 
     fun getStoredLuckyPrizeNum(context: Context): String? {
         sharedPref = context.getSharedPreferences(LUCKY_PRIZE, Context.MODE_PRIVATE)
-        return sharedPref.getString(LUCKY_PRIZE, "00")
+        return sharedPref.getString(LUCKY_PRIZE, "")
     }
 
 }

@@ -28,6 +28,8 @@ class PlayGame : AppCompatActivity() {
     private lateinit var current: String
     private lateinit var formatter2: DateTimeFormatter
     private lateinit var current2: String
+    private lateinit var formatter3: DateTimeFormatter
+    private lateinit var current3: String
     private lateinit var player: MediaPlayer
 
     private val imagesOfNumber = IntArray(10)
@@ -73,11 +75,6 @@ class PlayGame : AppCompatActivity() {
         imageviewsLuckyNumber[0] = playGameBinding.imgAnimation7
         imageviewsLuckyNumber[1] = playGameBinding.imgAnimation8
 
-        SharedStorage.storeLuckyNum(this@PlayGame, "343299")
-        SharedStorage.storeLuckyPrizeNum(this@PlayGame, "01")
-
-        pauseRolling()
-
         playGameBinding.btn.setOnClickListener {
             Intent(applicationContext, WebViewActivity::class.java).also {
                 startActivity(it)
@@ -85,6 +82,9 @@ class PlayGame : AppCompatActivity() {
         }
 
         fetchTimeFromDevice()
+
+        formatter3 = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss")
+        current3 = LocalDateTime.now().format(formatter3)
 
         if (NetworkInfo.isNetworkAvailable(this)) {
             callAPI()
@@ -105,6 +105,8 @@ class PlayGame : AppCompatActivity() {
                 current = LocalDateTime.now().format(formatter)
                 formatter2 = DateTimeFormatter.ofPattern("HH:mm:ss")
                 current2 = LocalDateTime.now().format(formatter2)
+                formatter3 = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss")
+                current3 = LocalDateTime.now().format(formatter3)
                 playGameBinding.txtTimeStamp.text = current
                 checkCurrentTime()
             }
@@ -147,9 +149,9 @@ class PlayGame : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                SharedStorage.storeLuckyNum(this@PlayGame, "888888")
-                SharedStorage.storeLuckyPrizeNum(this@PlayGame, "22")
-                pauseRolling()
+                if (NetworkInfo.isNetworkAvailable(this@PlayGame)) {
+                    callAPI()
+                }
             }
         }
         timer.start()
@@ -194,7 +196,7 @@ class PlayGame : AppCompatActivity() {
     }
 
     private fun playMusic() {
-        val timer = object : CountDownTimer(20000, 1000) {
+        val timer = object : CountDownTimer(22000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 player.also {
                     it.start()
@@ -211,7 +213,7 @@ class PlayGame : AppCompatActivity() {
     }
 
     private fun callAPI() {
-        val apiInterface = APIClient.callClient().fetchData()
+        val apiInterface = APIClient.callClient().fetchData(datetime = current3)
         apiInterface.enqueue(object : Callback<JsonElement> {
             override fun onResponse(call: Call<JsonElement>, response: Response<JsonElement>) {
                 //Log.e("CHECK", response.code().toString())
@@ -219,16 +221,30 @@ class PlayGame : AppCompatActivity() {
                     val jsonObject = JSONObject(
                         GsonBuilder().serializeNulls().create().toJson(response.body())
                     )
-
+                    val jsonObjectTwo = jsonObject.getJSONObject("data")
+                    val randomNumber = jsonObjectTwo.getString("random_number")
+                    var winnerNumber = jsonObjectTwo.getString("winner_number")
+                    if (winnerNumber == "null") {
+                        winnerNumber = "00"
+                        if (winnerNumber != SharedStorage.getStoredLuckyPrizeNum(this@PlayGame)) {
+                            SharedStorage.storeLuckyPrizeNum(this@PlayGame, winnerNumber)
+                        }
+                    } else if (winnerNumber != SharedStorage.getStoredLuckyPrizeNum(this@PlayGame)) {
+                        SharedStorage.storeLuckyPrizeNum(this@PlayGame, winnerNumber)
+                    }
+                    if (randomNumber != SharedStorage.getStoredLuckyNum(this@PlayGame)) {
+                        SharedStorage.storeLuckyNum(this@PlayGame, randomNumber)
+                    }
 
                 } else {
                     Toast.makeText(this@PlayGame, "Server Issue", Toast.LENGTH_LONG).show()
                 }
-
+                pauseRolling()
             }
 
             override fun onFailure(call: Call<JsonElement>, t: Throwable) {
                 Toast.makeText(this@PlayGame, "Server Issue", Toast.LENGTH_LONG).show()
+                pauseRolling()
             }
 
         })
