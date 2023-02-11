@@ -4,9 +4,10 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.widget.Toast
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
@@ -14,7 +15,6 @@ import com.ogmatechlab.bombaysattaking.R
 import com.ogmatechlab.bombaysattaking.api.APIClient
 import com.ogmatechlab.bombaysattaking.databinding.ActivityPlayGameBinding
 import com.ogmatechlab.bombaysattaking.utils.NetworkInfo
-import com.ogmatechlab.bombaysattaking.utils.SharedStorage
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -84,26 +84,34 @@ class PlayGame : AppCompatActivity() {
 
         fetchTimeFromDevice()
 
-        if (SharedStorage.getStoredLuckyNum(this@PlayGame) == "" && SharedStorage.getStoredLuckyPrizeNum(
-                this@PlayGame
-            ) == ""
-        ) {
-            fetchDataServer()
-        } else {
-            pauseRolling()
-        }
+        fetchDataServer(false)
 
         playGameBinding.imgReload.setOnClickListener {
-            fetchDataServer()
+            fetchDataServer(false)
         }
 
     }
 
-    private fun fetchDataServer() {
+    private fun fetchDataServer(isRolling: Boolean) {
         if (NetworkInfo.isNetworkAvailable(this)) {
+            if (!isRolling) {
+                playGameBinding.cardLoader.visibility = View.VISIBLE
+            }
             callAPI()
         } else {
-            Toast.makeText(this@PlayGame, "No Internet Connection", Toast.LENGTH_LONG).show()
+            showAlertMsg("Internet Connection no found")
+        }
+    }
+
+    private fun showAlertMsg(alertMsg: String) {
+        MaterialAlertDialogBuilder(this@PlayGame).apply {
+            setTitle("Alert")
+            setMessage(alertMsg)
+            setPositiveButton(android.R.string.ok) { _, _ ->
+                finish()
+            }
+            setCancelable(false)
+            show()
         }
     }
 
@@ -158,16 +166,14 @@ class PlayGame : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                if (NetworkInfo.isNetworkAvailable(this@PlayGame)) {
-                    callAPI()
-                }
+                fetchDataServer(true)
             }
         }
         timer.start()
     }
 
-    private fun pauseRolling() {
-        SharedStorage.getStoredLuckyNum(this@PlayGame)?.let {
+    private fun pauseRolling(randomNumber: String, winnerNumber: String) {
+        randomNumber.let {
             for (j in it.indices) {
                 for (i in imagesOfNumber.indices) {
                     if (it[j].digitToInt() == i) {
@@ -179,7 +185,7 @@ class PlayGame : AppCompatActivity() {
             }
         }
 
-        SharedStorage.getStoredLuckyPrizeNum(this@PlayGame)?.let {
+        winnerNumber.let {
             for (j in it.indices) {
                 for (i in luckyImagesOfNumber.indices) {
                     if (it[j].digitToInt() == i) {
@@ -238,25 +244,19 @@ class PlayGame : AppCompatActivity() {
                     var winnerNumber = jsonObjectTwo.getString("winner_number")
                     if (winnerNumber == "null") {
                         winnerNumber = "00"
-                        if (winnerNumber != SharedStorage.getStoredLuckyPrizeNum(this@PlayGame)) {
-                            SharedStorage.storeLuckyPrizeNum(this@PlayGame, winnerNumber)
-                        }
-                    } else if (winnerNumber != SharedStorage.getStoredLuckyPrizeNum(this@PlayGame)) {
-                        SharedStorage.storeLuckyPrizeNum(this@PlayGame, winnerNumber)
-                    }
-                    if (randomNumber != SharedStorage.getStoredLuckyNum(this@PlayGame)) {
-                        SharedStorage.storeLuckyNum(this@PlayGame, randomNumber)
                     }
 
+                    pauseRolling(randomNumber, winnerNumber)
+
+                    playGameBinding.cardLoader.visibility = View.GONE
+
                 } else {
-                    Toast.makeText(this@PlayGame, "Server Issue", Toast.LENGTH_LONG).show()
+                    showAlertMsg("Server Issue!! Unable to fetch data")
                 }
-                pauseRolling()
             }
 
             override fun onFailure(call: Call<JsonElement>, t: Throwable) {
-                Toast.makeText(this@PlayGame, "Server Issue", Toast.LENGTH_LONG).show()
-                pauseRolling()
+                showAlertMsg("Server Issue!! Unable to fetch data")
             }
 
         })
