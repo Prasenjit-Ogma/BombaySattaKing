@@ -22,6 +22,7 @@ import retrofit2.Response
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+
 class PlayGame : AppCompatActivity() {
     private lateinit var playGameBinding: ActivityPlayGameBinding
     private lateinit var formatter: DateTimeFormatter
@@ -83,19 +84,27 @@ class PlayGame : AppCompatActivity() {
 
         fetchTimeFromDevice()
 
-        formatter3 = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss")
-        current3 = LocalDateTime.now().format(formatter3)
-
-        if (NetworkInfo.isNetworkAvailable(this)) {
-            callAPI()
+        if (SharedStorage.getStoredLuckyNum(this@PlayGame) == "" && SharedStorage.getStoredLuckyPrizeNum(
+                this@PlayGame
+            ) == ""
+        ) {
+            fetchDataServer()
+        } else {
+            pauseRolling()
         }
 
         playGameBinding.imgReload.setOnClickListener {
-            if (NetworkInfo.isNetworkAvailable(this)) {
-                callAPI()
-            }
+            fetchDataServer()
         }
 
+    }
+
+    private fun fetchDataServer() {
+        if (NetworkInfo.isNetworkAvailable(this)) {
+            callAPI()
+        } else {
+            Toast.makeText(this@PlayGame, "No Internet Connection", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun fetchTimeFromDevice() {
@@ -213,7 +222,10 @@ class PlayGame : AppCompatActivity() {
     }
 
     private fun callAPI() {
-        val apiInterface = APIClient.callClient().fetchData(datetime = current3)
+        val apiInterface = APIClient.callClient().fetchData(
+            datetime = LocalDateTime.now()
+                .format(DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss"))
+        )
         apiInterface.enqueue(object : Callback<JsonElement> {
             override fun onResponse(call: Call<JsonElement>, response: Response<JsonElement>) {
                 //Log.e("CHECK", response.code().toString())
