@@ -5,7 +5,6 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -195,7 +194,6 @@ class PlayGame : AppCompatActivity() {
                 }
             }
         }
-        Log.e("CHECK", winnerNumber)
         winnerNumber.let {
             for (j in it.indices) {
                 for (i in luckyImagesOfNumber.indices) {
