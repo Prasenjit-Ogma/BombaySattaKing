@@ -2,6 +2,7 @@ package com.ogmatechlab.bombaysattaking.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
 import android.webkit.*
@@ -56,5 +57,21 @@ class WebViewActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (event?.action == KeyEvent.ACTION_DOWN) {
+            when (keyCode) {
+                KeyEvent.KEYCODE_BACK -> {
+                    if (webViewBinding.webView.canGoBack()) {
+                        webViewBinding.webView.goBack()
+                    } else {
+                        finish()
+                    }
+                    return true
+                }
+            }
+        }
+        return super.onKeyDown(keyCode, event)
     }
 }
