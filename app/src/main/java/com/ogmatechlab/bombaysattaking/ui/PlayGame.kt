@@ -2,6 +2,7 @@ package com.ogmatechlab.bombaysattaking.ui
 
 import android.content.Intent
 import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
@@ -32,6 +33,7 @@ class PlayGame : AppCompatActivity() {
     private lateinit var formatter3: DateTimeFormatter
     private lateinit var current3: String
     private lateinit var player: MediaPlayer
+    private val RES_PREFIX = "android.resource://com.ogmatechlab.bombaysattaking/"
 
     private val imagesOfNumber = IntArray(10)
     private val luckyImagesOfNumber = IntArray(10)
@@ -144,6 +146,14 @@ class PlayGame : AppCompatActivity() {
     }
 
     private fun startRolling() {
+        player.also {
+            it.setDataSource(
+                applicationContext,
+                Uri.parse(RES_PREFIX + R.raw.machine_sound)
+            )
+            it.prepare()
+        }
+
         val timer = object : CountDownTimer(20000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 Glide.with(this@PlayGame).asGif().load(R.raw.gif_down)
@@ -211,20 +221,10 @@ class PlayGame : AppCompatActivity() {
     }
 
     private fun playMusic() {
-        val timer = object : CountDownTimer(22000, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                player.also {
-                    it.start()
-                    it.isLooping = false
-                }
-            }
-
-            override fun onFinish() {
-                player.reset()
-
-            }
+        player.also {
+            it.start()
+            it.isLooping = false
         }
-        timer.start()
     }
 
     private fun callAPI() {
@@ -247,6 +247,13 @@ class PlayGame : AppCompatActivity() {
                     }
 
                     pauseRolling(randomNumber, winnerNumber)
+
+                    player.also {
+                        it.pause()
+                        it.seekTo(0)
+                        it.reset()
+                    }
+
 
                     playGameBinding.cardLoader.visibility = View.GONE
 
