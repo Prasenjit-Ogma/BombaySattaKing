@@ -5,7 +5,6 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -86,22 +85,27 @@ class PlayGame : AppCompatActivity() {
 
         fetchTimeFromDevice()
 
-        fetchDataServer(false)
+        val luckyNum = intent.getStringExtra(MainActivity.LUCKY_NUM)
+        val winnerNum = intent.getStringExtra(MainActivity.WINNER_NUM)
+
+        luckyNum?.let { luckNum ->
+            winnerNum?.let { winNum ->
+                pauseRolling(luckNum, winNum)
+            }
+        }
+
 
         playGameBinding.imgReload.setOnClickListener {
-            fetchDataServer(false)
+            fetchDataServer()
         }
 
     }
 
-    private fun fetchDataServer(isRolling: Boolean) {
+    private fun fetchDataServer() {
         if (NetworkInfo.isNetworkAvailable(this)) {
-            if (!isRolling) {
-                playGameBinding.cardLoader.visibility = View.VISIBLE
-            }
             callAPI()
         } else {
-            showAlertMsg("Internet Connection no found")
+            showAlertMsg("No Internet Connection")
         }
     }
 
@@ -176,7 +180,7 @@ class PlayGame : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                fetchDataServer(true)
+                fetchDataServer()
             }
         }
         timer.start()
@@ -255,9 +259,6 @@ class PlayGame : AppCompatActivity() {
                         it.seekTo(0)
                         it.reset()
                     }
-
-
-                    playGameBinding.cardLoader.visibility = View.GONE
 
                 } else {
                     showAlertMsg("Server Issue!! Unable to fetch data")
