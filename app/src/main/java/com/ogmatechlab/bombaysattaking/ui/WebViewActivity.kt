@@ -10,7 +10,7 @@ import com.ogmatechlab.bombaysattaking.databinding.ActivityWebViewBinding
 
 class WebViewActivity : AppCompatActivity() {
     companion object {
-        private const val EXTRA_URL = "https://www.ogmatechlab.com/mumbaiking/view_result.php"
+        private const val EXTRA_URL = "https://www.ogmatechlab.com/mumbaiking/view_result_app.php"
     }
 
     private lateinit var webViewBinding: ActivityWebViewBinding
