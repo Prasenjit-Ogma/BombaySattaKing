@@ -2,7 +2,6 @@ package com.ogmatechlab.bombaysattaking.ui
 
 import android.content.Intent
 import android.media.MediaPlayer
-import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
 import androidx.appcompat.app.AppCompatActivity
@@ -31,8 +30,7 @@ class PlayGame : AppCompatActivity() {
     private lateinit var current2: String
     private lateinit var formatter3: DateTimeFormatter
     private lateinit var current3: String
-    private lateinit var player: MediaPlayer
-    private val RES_PREFIX = "android.resource://com.ogmatechlab.bombaysattaking/"
+    private var player: MediaPlayer? = null
 
     private val imagesOfNumber = IntArray(10)
     private val luckyImagesOfNumber = IntArray(10)
@@ -150,13 +148,7 @@ class PlayGame : AppCompatActivity() {
     }
 
     private fun startRolling() {
-        player.also {
-            it.setDataSource(
-                applicationContext,
-                Uri.parse(RES_PREFIX + R.raw.machine_sound)
-            )
-            it.prepare()
-        }
+        player = MediaPlayer.create(this, R.raw.machine_sound)
 
         val timer = object : CountDownTimer(20000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
@@ -213,20 +205,12 @@ class PlayGame : AppCompatActivity() {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        player = MediaPlayer.create(this, R.raw.machine_sound)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        player.stop()
-    }
-
     private fun playMusic() {
-        player.also {
-            it.start()
-            it.isLooping = false
+        player?.let {
+            it.also {
+                it.start()
+                it.isLooping = false
+            }
         }
     }
 
@@ -254,10 +238,12 @@ class PlayGame : AppCompatActivity() {
 
                     pauseRolling(randomNumber, winnerNumber)
 
-                    player.also {
-                        it.pause()
-                        it.seekTo(0)
-                        it.reset()
+                    player?.let {
+                        it.also {
+                            it.pause()
+                            it.seekTo(0)
+                            it.reset()
+                        }
                     }
 
                 } else {
