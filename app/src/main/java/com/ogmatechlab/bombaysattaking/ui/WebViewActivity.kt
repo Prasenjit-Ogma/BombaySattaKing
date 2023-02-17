@@ -43,6 +43,7 @@ class WebViewActivity : AppCompatActivity() {
             webView.settings.allowFileAccess = true
             webView.settings.domStorageEnabled = false
             webView.settings.mediaPlaybackRequiresUserGesture = true
+            webView.settings.cacheMode = WebSettings.LOAD_NO_CACHE
             webView.loadUrl(EXTRA_URL)
 
 
