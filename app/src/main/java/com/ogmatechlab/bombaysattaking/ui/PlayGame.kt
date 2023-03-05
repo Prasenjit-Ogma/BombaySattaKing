@@ -154,7 +154,7 @@ class PlayGame : AppCompatActivity() {
     private fun startRolling() {
         player = MediaPlayer.create(this, R.raw.machine_sound)
 
-        val timer = object : CountDownTimer(20000, 1000) {
+        val timer = object : CountDownTimer(8500, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 Glide.with(this@PlayGame).asGif().load(R.raw.gif_down)
                     .into(playGameBinding.imgAnimation1)

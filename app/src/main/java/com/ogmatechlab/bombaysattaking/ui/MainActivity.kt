@@ -2,6 +2,9 @@ package com.ogmatechlab.bombaysattaking.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.GsonBuilder
@@ -31,7 +34,26 @@ class MainActivity : AppCompatActivity() {
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mainBinding.root)
 
-        fetchDataServer()
+        fetchTimeFromDevice()
+    }
+
+    private fun fetchTimeFromDevice() {
+        val getCurrentMinutes = LocalDateTime.now().format(DateTimeFormatter.ofPattern("mm"))
+        if (getCurrentMinutes == "00" || getCurrentMinutes == "30") {
+            val getSeconds = LocalDateTime.now().format(DateTimeFormatter.ofPattern("ss"))
+            Log.e("PRINT", "$getSeconds sec")
+            if (getSeconds.toInt() < 8) {
+                val convertedToMilis = (8 - getSeconds.toLong()) * 1000
+                Log.e("SHOW", "$convertedToMilis")
+                Handler(Looper.getMainLooper()).postDelayed({
+                    fetchDataServer()
+                }, convertedToMilis)
+            } else {
+                fetchDataServer()
+            }
+        } else {
+            fetchDataServer()
+        }
     }
 
     private fun fetchDataServer() {
