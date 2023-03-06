@@ -156,21 +156,21 @@ class PlayGame : AppCompatActivity() {
 
         val timer = object : CountDownTimer(8500, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                Glide.with(this@PlayGame).asGif().load(R.raw.gif_down)
+                Glide.with(applicationContext).asGif().load(R.raw.gif_down)
                     .into(playGameBinding.imgAnimation1)
-                Glide.with(this@PlayGame).asGif().load(R.raw.gif_up)
+                Glide.with(applicationContext).asGif().load(R.raw.gif_up)
                     .into(playGameBinding.imgAnimation2)
-                Glide.with(this@PlayGame).asGif().load(R.raw.gif_down)
+                Glide.with(applicationContext).asGif().load(R.raw.gif_down)
                     .into(playGameBinding.imgAnimation3)
-                Glide.with(this@PlayGame).asGif().load(R.raw.gif_up)
+                Glide.with(applicationContext).asGif().load(R.raw.gif_up)
                     .into(playGameBinding.imgAnimation4)
-                Glide.with(this@PlayGame).asGif().load(R.raw.gif_down)
+                Glide.with(applicationContext).asGif().load(R.raw.gif_down)
                     .into(playGameBinding.imgAnimation5)
-                Glide.with(this@PlayGame).asGif().load(R.raw.gif_up)
+                Glide.with(applicationContext).asGif().load(R.raw.gif_up)
                     .into(playGameBinding.imgAnimation6)
-                Glide.with(this@PlayGame).asGif().load(R.raw.gif_color_down)
+                Glide.with(applicationContext).asGif().load(R.raw.gif_color_down)
                     .into(playGameBinding.imgAnimation7)
-                Glide.with(this@PlayGame).asGif().load(R.raw.gif_color_up)
+                Glide.with(applicationContext).asGif().load(R.raw.gif_color_up)
                     .into(playGameBinding.imgAnimation8)
                 playMusic()
             }
@@ -188,7 +188,8 @@ class PlayGame : AppCompatActivity() {
                 for (i in imagesOfNumber.indices) {
                     if (it[j].digitToInt() == i) {
                         imageviewsPrizeNumber[j]?.let { imgView ->
-                            Glide.with(this).asBitmap().load(imagesOfNumber[i]).into(imgView)
+                            Glide.with(applicationContext).asBitmap().load(imagesOfNumber[i])
+                                .into(imgView)
                         }
                     }
                 }
@@ -199,7 +200,7 @@ class PlayGame : AppCompatActivity() {
                 for (i in luckyImagesOfNumber.indices) {
                     if (it[j].digitToInt() == i) {
                         imageviewsLuckyNumber[j]?.let { luckyImgView ->
-                            Glide.with(this).asBitmap().load(luckyImagesOfNumber[i])
+                            Glide.with(applicationContext).asBitmap().load(luckyImagesOfNumber[i])
                                 .into(luckyImgView)
                         }
                     }
