@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.GsonBuilder
@@ -87,31 +88,35 @@ class MainActivity : AppCompatActivity() {
                     val jsonObject = JSONObject(
                         GsonBuilder().serializeNulls().create().toJson(response.body())
                     )
+                    Log.e("PRINT", jsonObject.toString())
                     val jsonObjectTwo = jsonObject.getJSONObject("data")
                     val randomNumber = jsonObjectTwo.getString("random_number")
                     var winnerNumber = jsonObjectTwo.getString("winner_number")
+                    val status = jsonObject.getString("status")
 
                     if (winnerNumber == "null") {
                         winnerNumber = "00"
                     } else if (winnerNumber.toInt() <= 9) {
                         winnerNumber = "0$winnerNumber"
                     }
-
-                    Intent(applicationContext, PlayGame::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                        putExtra(LUCKY_NUM, randomNumber)
-                        putExtra(WINNER_NUM, winnerNumber)
-                    }.also {
-                        startActivity(it)
+                    if (status.equals("1")) {
+                        Intent(applicationContext, PlayGame::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                            putExtra(LUCKY_NUM, randomNumber)
+                            putExtra(WINNER_NUM, winnerNumber)
+                        }.also {
+                            startActivity(it)
+                        }
+                    } else {
+                        showAlertMsg("Server is under maintenance. Please try after sometime.")
                     }
-
                 } else {
-                    showAlertMsg("Server Issue!! Unable to fetch data")
+                    showAlertMsg("Server is under maintenance. Please try after sometime.")
                 }
             }
 
             override fun onFailure(call: Call<JsonElement>, t: Throwable) {
-                showAlertMsg("Server Issue!! Unable to fetch data")
+                showAlertMsg("Server is under maintenance. Please try after sometime.")
             }
 
         })
