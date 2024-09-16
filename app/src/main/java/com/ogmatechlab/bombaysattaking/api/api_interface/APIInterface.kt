@@ -8,4 +8,7 @@ import retrofit2.http.Query
 interface APIInterface {
     @GET("/mumbaiking/api.php?action=getWinnerNumber")
     fun fetchData(@Query("datetime") datetime: String): Call<JsonElement>
+
+    @GET("/api/timezone/Asia/Kolkata")
+    fun fetchWorldTimeAPI(): Call<JsonElement>
 }

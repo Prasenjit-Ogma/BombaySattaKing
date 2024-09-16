@@ -4,6 +4,7 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -14,30 +15,25 @@ import com.google.gson.JsonElement
 import com.ogmatechlab.bombaysattaking.R
 import com.ogmatechlab.bombaysattaking.api.APIClient
 import com.ogmatechlab.bombaysattaking.databinding.ActivityPlayGameBinding
+import com.ogmatechlab.bombaysattaking.utils.Constants
 import com.ogmatechlab.bombaysattaking.utils.NetworkInfo
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 
 class PlayGame : AppCompatActivity() {
     private lateinit var playGameBinding: ActivityPlayGameBinding
-    private lateinit var formatter: DateTimeFormatter
-    private lateinit var current: String
-    private lateinit var formatter2: DateTimeFormatter
-    private lateinit var current2: String
-    private lateinit var formatter3: DateTimeFormatter
-    private lateinit var current3: String
+    private var currentDateTime: String? = null
+    private var currentTime: String? = null
     private var player: MediaPlayer? = null
 
     private val imagesOfNumber = IntArray(10)
     private val luckyImagesOfNumber = IntArray(10)
     private val imageviewsPrizeNumber: Array<ShapeableImageView?> = arrayOfNulls(6)
     private val imageviewsLuckyNumber: Array<ShapeableImageView?> = arrayOfNulls(2)
-
+    private var timeMillis: Long? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,30 +78,57 @@ class PlayGame : AppCompatActivity() {
             }
         }
 
-        fetchTimeFromDevice()
-
-        val luckyNum = intent.getStringExtra(MainActivity.LUCKY_NUM)
-        val winnerNum = intent.getStringExtra(MainActivity.WINNER_NUM)
-
-        luckyNum?.let { luckNum ->
-            winnerNum?.let { winNum ->
-                pauseRolling(luckNum, winNum)
-            }
+        if (NetworkInfo.isNetworkAvailable(this)) {
+            playGameBinding.cardLoader.visibility = View.VISIBLE
+            getTimeFromServer()
+        } else {
+            showAlertMsg("No Internet Connection")
         }
 
-
-        playGameBinding.imgReload.setOnClickListener {
-            fetchDataServer(false)
-        }
+        pauseRolling("000000", "00")
 
     }
 
-    private fun fetchDataServer(isRolling: Boolean) {
-        if (NetworkInfo.isNetworkAvailable(this)) {
-            if (!isRolling) {
-                playGameBinding.cardLoader.visibility = View.VISIBLE
+    private fun getTimeFromServer() {
+        val apiInterface = APIClient.callTimeAPIClient().fetchWorldTimeAPI()
+        apiInterface.enqueue(object : Callback<JsonElement> {
+            override fun onResponse(call: Call<JsonElement>, response: Response<JsonElement>) {
+                Log.e("CHECK", "${response.raw()}")
+                if (response.isSuccessful) {
+                    val jsonObject = JSONObject(
+                        GsonBuilder().serializeNulls().create().toJson(response.body())
+                    )
+                    val jsonObjectDateTime =
+                        jsonObject.getString("datetime").dropLast(13).replace("T", " ")
+                            .replace("-", "/")
+                    timeMillis =
+                        Constants.getMillisFromDate(jsonObjectDateTime, Constants.DATE_INPUT_FORMAT)
+                    fetchedTimeFromServer()
+                    val luckyNum = intent.getStringExtra(MainActivity.LUCKY_NUM)
+                    val winnerNum = intent.getStringExtra(MainActivity.WINNER_NUM)
+
+                    luckyNum?.let { luckNum ->
+                        winnerNum?.let { winNum ->
+                            pauseRolling(luckNum, winNum)
+                        }
+                    }
+                    playGameBinding.cardLoader.visibility = View.GONE
+
+                } else {
+                    showAlertMsg("Server is under maintenance. Please try after sometime.")
+                }
             }
-            callAPI()
+
+            override fun onFailure(call: Call<JsonElement>, t: Throwable) {
+                showAlertMsg("Server is under maintenance. Please try after sometime.")
+            }
+
+        })
+    }
+
+    private fun fetchDataServer(timeMillis: Long?) {
+        if (NetworkInfo.isNetworkAvailable(this)) {
+            callAPI(timeMillis)
         } else {
             showAlertMsg("No Internet Connection")
         }
@@ -123,21 +146,19 @@ class PlayGame : AppCompatActivity() {
         }
     }
 
-    private fun fetchTimeFromDevice() {
-        val timer = object : CountDownTimer(60000, 1000) {
+    private fun fetchedTimeFromServer() {
+        val timer = object : CountDownTimer(1000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
-                current = LocalDateTime.now().format(formatter)
-                formatter2 = DateTimeFormatter.ofPattern("HH:mm:ss")
-                current2 = LocalDateTime.now().format(formatter2)
-                formatter3 = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss")
-                current3 = LocalDateTime.now().format(formatter3)
-                playGameBinding.txtTimeStamp.text = current
+                timeMillis = timeMillis?.plus(1000)
+                currentDateTime =
+                    Constants.getDateTimeFromMillis(timeMillis, Constants.DATE_TIME_FORMAT)
+                currentTime = Constants.getDateTimeFromMillis(timeMillis, Constants.TIME_FORMAT)
+                playGameBinding.txtTimeStamp.text = currentDateTime
                 checkCurrentTime()
             }
 
             override fun onFinish() {
-                fetchTimeFromDevice()
+                fetchedTimeFromServer()
             }
         }
         timer.start()
@@ -145,13 +166,13 @@ class PlayGame : AppCompatActivity() {
 
     fun checkCurrentTime() {
         for (i in 10..20) {
-            if (current2 == "$i:00:00" || current2 == "$i:30:00" && current2 != "20:30:00") {
-                startRolling()
+            if (currentTime == "$i:00:00" || currentTime == "$i:30:00" && currentTime != "20:30:00") {
+                startRolling(timeMillis)
             }
         }
     }
 
-    private fun startRolling() {
+    private fun startRolling(timeMillis: Long?) {
         player = MediaPlayer.create(this, R.raw.machine_sound)
 
         val timer = object : CountDownTimer(8500, 1000) {
@@ -176,7 +197,7 @@ class PlayGame : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                fetchDataServer(true)
+                fetchDataServer(timeMillis)
             }
         }
         timer.start()
@@ -219,14 +240,13 @@ class PlayGame : AppCompatActivity() {
         }
     }
 
-    private fun callAPI() {
+    private fun callAPI(timeMillis: Long?) {
         val apiInterface = APIClient.callClient().fetchData(
-            datetime = LocalDateTime.now()
-                .format(DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss"))
+            datetime = Constants.getDateTimeFromMillis(timeMillis, Constants.DATE_OUTPUT_FORMAT)!!
         )
         apiInterface.enqueue(object : Callback<JsonElement> {
             override fun onResponse(call: Call<JsonElement>, response: Response<JsonElement>) {
-                //Log.e("CHECK", response.code().toString())
+                Log.e("CHECK", "${response.raw()}")
                 if (response.isSuccessful) {
                     val jsonObject = JSONObject(
                         GsonBuilder().serializeNulls().create().toJson(response.body())

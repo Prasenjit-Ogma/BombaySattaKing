@@ -28,5 +28,14 @@ class APIClient {
                 .build()
             return retrofit.create(APIInterface::class.java)
         }
+
+        fun callTimeAPIClient(): APIInterface {
+            val retrofit: Retrofit = Retrofit.Builder()
+                .baseUrl(Constants.TIME_API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
+                .build()
+            return retrofit.create(APIInterface::class.java)
+        }
     }
 }

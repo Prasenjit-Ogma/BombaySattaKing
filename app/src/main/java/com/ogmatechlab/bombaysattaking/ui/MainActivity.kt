@@ -5,19 +5,19 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
 import com.ogmatechlab.bombaysattaking.api.APIClient
 import com.ogmatechlab.bombaysattaking.databinding.ActivityMainBinding
+import com.ogmatechlab.bombaysattaking.utils.Constants
 import com.ogmatechlab.bombaysattaking.utils.NetworkInfo
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,31 +34,70 @@ class MainActivity : AppCompatActivity() {
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mainBinding.root)
 
-        fetchTimeFromDevice()
+        if (NetworkInfo.isNetworkAvailable(this)) {
+            getTimeFromServer()
+            mainBinding.cardLoader.visibility = View.VISIBLE
+        } else {
+            showAlertMsg("No Internet Connection")
+        }
     }
 
-    private fun fetchTimeFromDevice() {
-        val getCurrentMinutes = LocalDateTime.now().format(DateTimeFormatter.ofPattern("mm"))
+    private fun getTimeFromServer() {
+        val apiInterface = APIClient.callTimeAPIClient().fetchWorldTimeAPI()
+        apiInterface.enqueue(object : Callback<JsonElement> {
+            override fun onResponse(call: Call<JsonElement>, response: Response<JsonElement>) {
+                Log.e("CHECK", "${response.raw()}")
+                if (response.isSuccessful) {
+                    val jsonObject = JSONObject(
+                        GsonBuilder().serializeNulls().create().toJson(response.body())
+                    )
+                    val jsonObjectDateTime =
+                        jsonObject.getString("datetime").dropLast(13).replace("T", " ")
+                            .replace("-", "/")
+                    fetchedTimeFromServer(jsonObjectDateTime)
+
+                } else {
+                    showAlertMsg("Server is under maintenance. Please try after sometime.")
+                }
+            }
+
+            override fun onFailure(call: Call<JsonElement>, t: Throwable) {
+                showAlertMsg("Server is under maintenance. Please try after sometime.")
+            }
+
+        })
+    }
+
+    private fun fetchedTimeFromServer(serverDateTime: String) {
+        val getCurrentMinutes = Constants.getDesiredDateTimeFormat(
+            dateTimeString = serverDateTime,
+            inputFormatDateTime = Constants.DATE_INPUT_FORMAT,
+            outputFormatDateTime = Constants.TIME_IN_MIN
+        )
         if (getCurrentMinutes == "00" || getCurrentMinutes == "30") {
-            val getSeconds = LocalDateTime.now().format(DateTimeFormatter.ofPattern("ss"))
+            val getSeconds = Constants.getDesiredDateTimeFormat(
+                dateTimeString = serverDateTime,
+                inputFormatDateTime = Constants.DATE_INPUT_FORMAT,
+                outputFormatDateTime = Constants.TIME_IN_SEC
+            )
             //Log.e("PRINT", "$getSeconds sec")
             if (getSeconds.toInt() < 8) {
                 val convertedToMilis = (8 - getSeconds.toLong()) * 1000
                 //Log.e("SHOW", "$convertedToMilis")
                 Handler(Looper.getMainLooper()).postDelayed({
-                    fetchDataServer()
+                    fetchDataServer(serverDateTime)
                 }, convertedToMilis)
             } else {
-                fetchDataServer()
+                fetchDataServer(serverDateTime)
             }
         } else {
-            fetchDataServer()
+            fetchDataServer(serverDateTime)
         }
     }
 
-    private fun fetchDataServer() {
+    private fun fetchDataServer(serverDateTime: String) {
         if (NetworkInfo.isNetworkAvailable(this)) {
-            callAPI()
+            callAPI(serverDateTime)
         } else {
             showAlertMsg("No Internet Connection")
         }
@@ -76,14 +115,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun callAPI() {
+    private fun callAPI(serverDateTime: String) {
         val apiInterface = APIClient.callClient().fetchData(
-            datetime = LocalDateTime.now()
-                .format(DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss"))
+            datetime = Constants.getDesiredDateTimeFormat(
+                dateTimeString = serverDateTime,
+                inputFormatDateTime = Constants.DATE_INPUT_FORMAT,
+                outputFormatDateTime = Constants.DATE_OUTPUT_FORMAT
+            )
         )
         apiInterface.enqueue(object : Callback<JsonElement> {
             override fun onResponse(call: Call<JsonElement>, response: Response<JsonElement>) {
-                //Log.e("CHECK", response.code().toString())
+                //Log.e("CHECK", "${response.raw()}")
                 if (response.isSuccessful) {
                     val jsonObject = JSONObject(
                         GsonBuilder().serializeNulls().create().toJson(response.body())
@@ -100,6 +142,7 @@ class MainActivity : AppCompatActivity() {
                         winnerNumber = "0$winnerNumber"
                     }
                     if (status.equals("1")) {
+                        mainBinding.cardLoader.visibility = View.GONE
                         Intent(applicationContext, PlayGame::class.java).apply {
                             flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                             putExtra(LUCKY_NUM, randomNumber)
