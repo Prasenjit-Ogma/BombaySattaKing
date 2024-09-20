@@ -78,18 +78,26 @@ class PlayGame : AppCompatActivity() {
             }
         }
 
-        if (NetworkInfo.isNetworkAvailable(this)) {
-            playGameBinding.cardLoader.visibility = View.VISIBLE
-            getTimeFromServer()
-        } else {
-            showAlertMsg("No Internet Connection")
+        playGameBinding.imgReload.setOnClickListener {
+            checkTimeNetwork(true)
         }
+
+        checkTimeNetwork()
 
         pauseRolling("000000", "00")
 
     }
 
-    private fun getTimeFromServer() {
+    private fun checkTimeNetwork(isReloaded: Boolean = false) {
+        if (NetworkInfo.isNetworkAvailable(this)) {
+            playGameBinding.cardLoader.visibility = View.VISIBLE
+            getTimeFromServer(isReloaded)
+        } else {
+            showAlertMsg("No Internet Connection")
+        }
+    }
+
+    private fun getTimeFromServer(isReloaded: Boolean) {
         val apiInterface = APIClient.callTimeAPIClient().fetchWorldTimeAPI()
         apiInterface.enqueue(object : Callback<JsonElement> {
             override fun onResponse(call: Call<JsonElement>, response: Response<JsonElement>) {
@@ -103,7 +111,7 @@ class PlayGame : AppCompatActivity() {
                             .replace("-", "/")
                     timeMillis =
                         Constants.getMillisFromDate(jsonObjectDateTime, Constants.DATE_INPUT_FORMAT)
-                    fetchedTimeFromServer()
+                    if (isReloaded) fetchDataServer(timeMillis) else fetchedTimeFromServer()
                     val luckyNum = intent.getStringExtra(MainActivity.LUCKY_NUM)
                     val winnerNum = intent.getStringExtra(MainActivity.WINNER_NUM)
 
