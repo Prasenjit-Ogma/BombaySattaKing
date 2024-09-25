@@ -111,16 +111,18 @@ class PlayGame : AppCompatActivity() {
                             .replace("-", "/")
                     timeMillis =
                         Constants.getMillisFromDate(jsonObjectDateTime, Constants.DATE_INPUT_FORMAT)
-                    if (isReloaded) fetchDataServer(timeMillis) else fetchedTimeFromServer()
-                    val luckyNum = intent.getStringExtra(MainActivity.LUCKY_NUM)
-                    val winnerNum = intent.getStringExtra(MainActivity.WINNER_NUM)
+                    if (isReloaded) fetchDataServer(timeMillis) else {
+                        fetchedTimeFromServer()
+                        val luckyNum = intent.getStringExtra(MainActivity.LUCKY_NUM)
+                        val winnerNum = intent.getStringExtra(MainActivity.WINNER_NUM)
 
-                    luckyNum?.let { luckNum ->
-                        winnerNum?.let { winNum ->
-                            pauseRolling(luckNum, winNum)
+                        luckyNum?.let { luckNum ->
+                            winnerNum?.let { winNum ->
+                                pauseRolling(luckNum, winNum)
+                            }
                         }
+                        playGameBinding.cardLoader.visibility = View.GONE
                     }
-                    playGameBinding.cardLoader.visibility = View.GONE
 
                 } else {
                     showAlertMsg("Server is under maintenance. Please try after sometime.")
